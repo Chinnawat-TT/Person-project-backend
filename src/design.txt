@@ -1,0 +1,15 @@
+# SIGNUP
+method : Post   path : /verifi/signup
+Request Body : fullName , email , password , confirmpassword 
+Response : 
+success= status 201  => object { accessToken: String  ,userdata }
+error = status 400 { message : String , emailExist : true }
+serverError = status 500 { message : String}
+
+# Login
+method : POST  path :/verifi/login
+Request Body : email,password
+Response :
+success = status 200 => object { id : Number , fullname: String , email : String}
+error = status 400 {message : String}
+serverError = status 500 { message : String}

@@ -7,7 +7,7 @@ const cors = require("cors");
 const notFoundMiddleware = require('./middleware/not-found')
 const errorMiddleware = require('./middleware/error')
 const ratelimitMiddleware = require('./middleware/rate-limit')
-
+const verifiRoute =require('./routes/verifi-route')
 const app = express();
 
 app.use(cors())
@@ -15,7 +15,7 @@ app.use(morgan('dev'))
 app.use(ratelimitMiddleware)
 app.use(express.json())
 
-
+app.use('/verifi',verifiRoute)
 
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)

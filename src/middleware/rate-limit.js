@@ -2,7 +2,7 @@
 const { rateLimit } = require('express-rate-limit')
 
 module.exports = rateLimit({
-    windowMs : 1*60*1000,
-    limit:1,
+    windowMs : 5*60*1000,
+    limit:100,
     message : 'fk stop request please '
 })
