@@ -19,6 +19,7 @@ try {
         {expiresIn : process.env.JWT_EXPIRE}
     )
     delete user.password
+    console.log(user)
     res.status(201).json({accessToken ,user})
 } catch (err) {
     next(err)
@@ -48,8 +49,13 @@ try {
         {expiresIn : process.env.JWT_EXPIRE}
     )
     delete user.password
+    console.log(user)
     res.status(201).json({accessToken ,user})
 } catch (error) {
     
 }
+}
+
+exports.getme = (req ,res ,next) =>{
+    res.status(200).json({ user : req.user})
 }

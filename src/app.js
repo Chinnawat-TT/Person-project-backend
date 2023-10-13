@@ -19,5 +19,6 @@ app.use('/verifi',verifiRoute)
 
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
+
 const PORT =process.env.PORT || '5000'
 app.listen(PORT ,()=> console.log(`server run on port : ${PORT}`))
