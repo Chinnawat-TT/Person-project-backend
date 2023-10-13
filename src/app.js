@@ -8,6 +8,7 @@ const notFoundMiddleware = require('./middleware/not-found')
 const errorMiddleware = require('./middleware/error')
 const ratelimitMiddleware = require('./middleware/rate-limit')
 const verifiRoute =require('./routes/verifi-route')
+const adminRoute =require('./routes/admin-route')
 const app = express();
 
 app.use(cors())
@@ -16,7 +17,7 @@ app.use(ratelimitMiddleware)
 app.use(express.json())
 
 app.use('/verifi',verifiRoute)
-
+app.use('/admin',adminRoute)
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
 

@@ -20,6 +20,7 @@ module.exports = async (req, res ,next) =>{
                 id : payload.userId
             }
         })
+        console.log(user)
         if(!user){
             return next(createError( 400,'unauthenticated'))
         }
