@@ -4,14 +4,14 @@ const prisma = require('../models/prisma')
 module.exports = async (req ,res ,next) =>{
  try {
         const authorization =req.headers.authorization
-        console.log(authorization)
+        
         if(!authorization || !authorization.startsWith('Bearer')){
             return next(createError(401,' you are not admin !! unauthenticated'))
         }
         const token = authorization.split( ' ' )[1]
-        console.log(token)
+        
         const payload = jwt.verify(token, process.env.JWT_SECRET_KEY || "kdkfiechhdwia")
-        console.log(payload)
+        
         const user = await prisma.user.findUnique({
             where :{
                 id :  payload.userId
@@ -25,7 +25,7 @@ module.exports = async (req ,res ,next) =>{
         }
         delete user.password
         req.user = user
-        console.log("admin in coming")
+        console.log(" ===== admin in coming =====")
         next();
  } catch (error) {
     if( err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError'){

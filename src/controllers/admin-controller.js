@@ -10,7 +10,7 @@ exports.createMainImage = async(req,res,next)=>{
 
         const value = req.body
 
-        if(req.files){
+        if(req.files.mainImage){
             value.mainImage = await upload(req.files.mainImage[0].path)
         }
         console.log(value)
@@ -18,16 +18,20 @@ exports.createMainImage = async(req,res,next)=>{
             data : value
         })
         console.log(product)
-        // if (!req.files) {
-        //     return next(createError(400,"image is required"));
-        //   }
-        
-        // const response ={}
-        // if( req.files.mainImage){
-        //     const url = await upload(req.files.mainImage[0].path)
-        //     response.mainImage = url
-            
-        // }
+
+        const subImage ={productId : product.id}
+
+        const upload = []
+        upload= req.files.subImage[0]
+        if(req.files.subImage){
+            subImage.name = await upload(req.files.subImage[0].path)
+        }
+        // const imageSub = await prisma.productsimage.create({
+        //     data :subImage
+        // })
+        // console.log(imageSub)
+       
+        res.status(200).json("create product success",)
     } catch (err) {
         next(err)
     }
