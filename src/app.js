@@ -17,6 +17,7 @@ app.use(ratelimitMiddleware)
 app.use(express.json())
 
 app.use('/verifi',verifiRoute)
+
 app.use('/admin',adminRoute)
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
