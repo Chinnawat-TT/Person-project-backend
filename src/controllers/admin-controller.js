@@ -19,13 +19,13 @@ exports.createMainImage = async(req,res,next)=>{
         })
         console.log(product)
 
-        const subImage ={productId : product.id}
+        // const subImage ={productId : product.id}
 
-        const upload = []
-        upload= req.files.subImage[0]
-        if(req.files.subImage){
-            subImage.name = await upload(req.files.subImage[0].path)
-        }
+        // const upload = []
+        // upload= req.files.subImage[0]
+        // if(req.files.subImage){
+        //     subImage.name = await upload(req.files.subImage[0].path)
+        // }
         // const imageSub = await prisma.productsimage.create({
         //     data :subImage
         // })
