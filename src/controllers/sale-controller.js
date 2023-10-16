@@ -61,23 +61,32 @@ exports.salePageKids = async (req,res,next)=>{
 }
 
 exports.getProductItem = async(req,res,next)=>{
+    const result = {}
 try {
     console.log("++++++++++++++++++++++")
 
     const{itemId}=req.params
-    const item = await prisma.product.findFirst({
+    const item = await prisma.product.findMany({
         where : {
             id : +itemId
+        },include :{
+            Productsimage :{
+                select :{
+                    name:  true
+                }
+            }
         }
     })
-    console.log(item)
-    const subImage = await prisma.productsimage.findMany({
-        where :{
-            productId : +itemId
-        }
-    })
-    console.log(subImage)
-    res.status(200).json({subImage,item})
+    
+    console.log("itemjaaaaaaaaaa",item)
+    // const subImage = await prisma.productsimage.findMany({
+    //     where :{
+    //         productId : +itemId
+    //     }
+    // })
+    // result.subImage= subImage
+    // console.log (subImage)
+    res.status(200).json(item)
 } catch (err) {
     next(err)
 }
