@@ -17,8 +17,8 @@ exports.salePageMen = async (req,res,next)=>{
         })
         console.log(categoriesMen)
         res.status(200).json(categoriesMen)
-    } catch (error) {
-        
+    } catch (err) {
+        next(err)
     }
 }
 
@@ -36,8 +36,8 @@ exports.salePageWomen = async (req,res,next)=>{
         })
         console.log(categoriesWoMen)
         res.status(200).json(categoriesWoMen)
-    } catch (error) {
-        
+    } catch (err) {
+        next(err)
     }
 }
 
@@ -55,7 +55,29 @@ exports.salePageKids = async (req,res,next)=>{
         })
         console.log(categoriesKids)
         res.status(200).json(categoriesKids)
-    } catch (error) {
-        
+    } catch (err) {
+        next(err)
     }
+}
+
+exports.getProductItem = async(req,res,next)=>{
+try {
+    console.log("++++++++++++++++++++++")
+    const{itemId}=req.params
+    const item = await prisma.product.findFirst({
+        where : {
+            id : +itemId
+        }
+    })
+    console.log(item)
+    const subImage = await prisma.productsimage.findMany({
+        where :{
+            productId : +itemId
+        }
+    })
+    console.log(subImage)
+    res.status(200).json("get success",subImage,item)
+} catch (err) {
+    next(err)
+}
 }
