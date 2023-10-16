@@ -63,6 +63,7 @@ exports.salePageKids = async (req,res,next)=>{
 exports.getProductItem = async(req,res,next)=>{
 try {
     console.log("++++++++++++++++++++++")
+
     const{itemId}=req.params
     const item = await prisma.product.findFirst({
         where : {
@@ -76,7 +77,7 @@ try {
         }
     })
     console.log(subImage)
-    res.status(200).json("get success",subImage,item)
+    res.status(200).json({subImage,item})
 } catch (err) {
     next(err)
 }
