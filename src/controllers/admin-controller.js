@@ -1,3 +1,4 @@
+const fs =require('fs/promises')
 const createError = require("../utility/create-error");
 const { upload }=require('../utility/cloudinary-service');
 const prisma = require("../models/prisma");
@@ -5,11 +6,13 @@ const prisma = require("../models/prisma");
 
 exports.createMainImage = async(req,res,next)=>{
     try {
-        console.log(req.files)
-        console.log(req.body)
+        console.log("main :",req.files.mainImage)
+        console.log("sub : ",req.files.subImage)
+        
+        // console.log("--------------------",req.body.message)
 
-        const value = req.body
-
+        const value = JSON.parse(req.body.message)
+        
         if(req.files.mainImage){
             value.mainImage = await upload(req.files.mainImage[0].path)
         }
@@ -20,23 +23,48 @@ exports.createMainImage = async(req,res,next)=>{
         console.log(product)
 
         const idSubImage ={productId : product.id}
-
+        console.log(idSubImage)
         const {subImage} = req.files
         
+        console.log(subImage)
       
         if (req.files.subImage){
-            
             for(element of subImage){
+
                 idSubImage.name = await upload(element.path)
-                imageSub = await prisma.productsimage.create({
+                
+                 await prisma.productsimage.create({
                         data :idSubImage
                     })
+                    
             }
+            
         }
 
        
-        res.status(200).json("create product success",)
+        res.status(200).json("upload done")
     } catch (err) {
         next(err)
+    } finally {
+        if(req.files.mainImage){
+            fs.unlink(req.files.mainImage[0].path)
+        }
+        if(req.files.subImage){
+            for( let i = 0 ; i<req.files.subImage.length ; i++){
+                fs.unlink(req.files.subImage[i].path)
+            }
+        }
     }
+}
+
+exports.getAllProducts =async (req,res ,next) =>{
+try {
+    const data = await prisma.product.findMany({
+
+    })
+    console.log(data)
+    res.status(200).json({data})
+} catch (err) {
+    next(err)
+}
 }

@@ -11,4 +11,5 @@ router.post("/",adminAuthenticateMiddleware,uploadMiddleware.fields([
     { name : "mainImage",maxCount: 1 },
     { name: "subImage", maxCount: 10 }
 ]),adminController.createMainImage)
+router.get("/",adminAuthenticateMiddleware,adminController.getAllProducts)
 module.exports=router
