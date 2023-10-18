@@ -104,3 +104,40 @@ try {
     next(err)
 }
 }
+
+exports.editProduct = async (req ,res ,next)=>{
+try {
+    const { value ,error } = checkProductIdSchema.validate(req.params)
+    if(error){
+        return next(error)
+    }
+    console.log("== params ==",value)
+
+    const data = req.body
+    console.log("== body ==",data)
+
+    const existProduct = await prisma.product.findFirst({
+        where :{
+            id :value.productId
+        }
+    })
+
+    if(!existProduct){
+        return next(createError(400,"you can not delete this product"))
+    }
+    console.log(existProduct)
+    const response = await prisma.product.update({
+        data :{
+            name : data.name,
+            price : data.price,
+            description : data.description
+        },where :{
+            id : value.productId
+        }
+    })
+    console.log(response)
+    res.status(200).json({response})
+} catch (err) {
+    next(err)
+}
+}
