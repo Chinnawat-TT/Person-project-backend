@@ -2,7 +2,7 @@ const fs =require('fs/promises')
 const createError = require("../utility/create-error");
 const { upload }=require('../utility/cloudinary-service');
 const prisma = require("../models/prisma");
-
+const { checkProductIdSchema } =require("../validators/product-validator")
 
 exports.createMainImage = async(req,res,next)=>{
     try {
@@ -64,6 +64,42 @@ try {
     })
     console.log(result)
     res.status(200).json(result)
+} catch (err) {
+    next(err)
+}
+}
+
+exports.deleteProduct = async (req,res,next) =>{
+try {
+    console.log(req.params)
+    const { value ,error } = checkProductIdSchema.validate(req.params)
+    if(error){
+        return next(error)
+    }
+    console.log(value)
+
+    const existProduct = await prisma.product.findFirst({
+        where :{
+            id :value.productId
+        }
+    })
+    if(!existProduct){
+        return next(createError(400,"you can not delete this product"))
+    }
+    await prisma.productsimage.deleteMany({
+        where:{
+            productId : value.productId
+        }
+    })
+
+    await prisma.product.delete({
+        where:{
+            id : value.productId
+        }
+    })
+    
+    console.log(existProduct)
+    res.status(200).json({message : " delete success "})
 } catch (err) {
     next(err)
 }

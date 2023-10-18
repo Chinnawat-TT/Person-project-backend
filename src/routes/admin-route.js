@@ -12,4 +12,5 @@ router.post("/",adminAuthenticateMiddleware,uploadMiddleware.fields([
     { name: "subImage", maxCount: 10 }
 ]),adminController.createMainImage)
 router.get("/",adminAuthenticateMiddleware,adminController.getAllProducts)
+router.delete("/:productId",adminAuthenticateMiddleware,adminController.deleteProduct)
 module.exports=router
