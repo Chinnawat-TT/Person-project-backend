@@ -59,11 +59,11 @@ exports.createMainImage = async(req,res,next)=>{
 
 exports.getAllProducts =async (req,res ,next) =>{
 try {
-    const data = await prisma.product.findMany({
+    const result = await prisma.product.findMany({
 
     })
-    console.log(data)
-    res.status(200).json({data})
+    console.log(result)
+    res.status(200).json(result)
 } catch (err) {
     next(err)
 }
