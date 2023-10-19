@@ -60,14 +60,29 @@ exports.getme = (req ,res ,next) =>{
     res.status(200).json({ user : req.user})
 }
 
-exports.addToCart = (req,res,next)=>{
+exports.addToCart = async (req,res,next)=>{
 try {
     console.log("add to cart ja")
-    console.log(req.user)
-    console.log(req.body)
+    // console.log("user =",req.user)
+    // console.log("body =",req.body)
+    const user = req.user
+    const value = req.body
+    console.log(user)
+    console.log(value)
+    const data = {}
+    data.userId =user.id
+    data.productId =value.id
+    data.size = value.size
+    console.log(data)
 
-    res.status(200).json({message :"add done"})
-} catch (error) {
+    const response =await prisma.cart.create({
+        data :data
+    }) 
+
+    console.log(response)
+
+    res.status(200).json(response)
+} catch (err) {
     next(err)
 }
 }
