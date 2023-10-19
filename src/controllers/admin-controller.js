@@ -126,7 +126,7 @@ try {
         return next(createError(400,"you can not delete this product"))
     }
     console.log(existProduct)
-    const response = await prisma.product.update({
+    await prisma.product.update({
         data :{
             name : data.name,
             price : data.price,
@@ -135,8 +135,13 @@ try {
             id : value.productId
         }
     })
-    console.log(response)
-    res.status(200).json({response})
+    const response = await prisma.product.findMany({
+        
+    })
+    // const result= []
+    // result.push(response)
+    // console.log(result)
+    res.status(200).json(response)
 } catch (err) {
     next(err)
 }

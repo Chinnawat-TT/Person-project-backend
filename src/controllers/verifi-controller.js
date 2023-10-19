@@ -51,8 +51,8 @@ try {
     delete user.password
     console.log(user)
     res.status(201).json({accessToken ,user})
-} catch (error) {
-    
+} catch (err) {
+    next(err)
 }
 }
 
@@ -60,3 +60,14 @@ exports.getme = (req ,res ,next) =>{
     res.status(200).json({ user : req.user})
 }
 
+exports.addToCart = (req,res,next)=>{
+try {
+    console.log("add to cart ja")
+    console.log(req.user)
+    console.log(req.body)
+
+    res.status(200).json({message :"add done"})
+} catch (error) {
+    next(err)
+}
+}
