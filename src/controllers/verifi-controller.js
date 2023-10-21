@@ -50,7 +50,12 @@ try {
     )
     delete user.password
     console.log(user)
-    res.status(201).json({accessToken ,user})
+    const findCart = await prisma.cart.findMany({
+        where :{
+            userId : user.id
+        }
+    })
+    res.status(201).json({accessToken ,user ,findCart})
 } catch (err) {
     next(err)
 }
@@ -85,4 +90,20 @@ try {
 } catch (err) {
     next(err)
 }
+}
+
+exports.getcart = async (req,res,next)=>{
+    try {
+
+        console.log(req.user)
+        const findCart = await prisma.cart.findMany({
+            where :{
+                userId : req.user.id
+            }
+        })
+        console.log(findCart.length)
+        res.status(200).json(findCart)
+    } catch (err) {
+        next(err)
+    }
 }
