@@ -99,9 +99,14 @@ exports.getcart = async (req,res,next)=>{
         const findCart = await prisma.cart.findMany({
             where :{
                 userId : req.user.id
+            },include :{
+                products :{
+                    
+                }
             }
         })
         console.log(findCart.length)
+
         res.status(200).json(findCart)
     } catch (err) {
         next(err)
