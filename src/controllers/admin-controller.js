@@ -86,11 +86,18 @@ try {
     if(!existProduct){
         return next(createError(400,"you can not delete this product"))
     }
+    await prisma.cart.deleteMany({
+        where:{
+            productId : value.productId
+        }
+    })
+
     await prisma.productsimage.deleteMany({
         where:{
             productId : value.productId
         }
     })
+
 
     await prisma.product.delete({
         where:{

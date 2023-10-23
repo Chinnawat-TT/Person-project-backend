@@ -112,3 +112,35 @@ exports.getcart = async (req,res,next)=>{
         next(err)
     }
 }
+
+exports.deleteItemCart = async (req ,res,next)=>{
+try {
+    // console.log("user =",req.user)
+    // console.log(req.params)
+    const user = req.user
+    const target = req.params
+    console.log(user)
+    console.log(target)
+
+    const cartTargat = await prisma.cart.findFirst({
+        where :{
+            userId : user.id,
+            productId : +target.itemId
+        }
+    })
+    await prisma.cart.delete({
+        where :{
+            id : cartTargat.id
+        }
+    })
+    // const response = await prisma.cart.findMany({
+    //     where :{
+    //         userId :user.id
+    //     }
+    // })
+    console.log("-----------",cartTargat)
+    res.status(200).json({cartTargat})
+} catch (err) {
+    next(err)
+}
+}
