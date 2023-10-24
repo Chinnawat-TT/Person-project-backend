@@ -77,8 +77,8 @@ model Order {
   id         Int         @id @default(autoincrement())
   orderTotal Int
   date       DateTime    @default(now())
-  status     Status
-  slip       String
+  status     Status      @default(PENDING)
+  slip       String?
   userId     Int
   user       User        @relation(fields: [userId], references: [id])
   Orderitem  Orderitem[]
@@ -87,7 +87,7 @@ model Order {
 model Orderitem {
   id        Int     @id @default(autoincrement())
   price     Decimal
-  quatiny   Int
+  quantiny   Int
   size      Size
   orderId   Int
   order     Order   @relation(fields: [orderId], references: [id])

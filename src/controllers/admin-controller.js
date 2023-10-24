@@ -118,10 +118,10 @@ try {
     if(error){
         return next(error)
     }
-    console.log("== params ==",value)
+    // console.log("== params ==",value)
 
     const data = req.body
-    console.log("== body ==",data)
+    // console.log("== body ==",data)
 
     const existProduct = await prisma.product.findFirst({
         where :{

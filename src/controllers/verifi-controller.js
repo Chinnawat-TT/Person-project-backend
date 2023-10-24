@@ -133,14 +133,40 @@ try {
             id : cartTargat.id
         }
     })
-    // const response = await prisma.cart.findMany({
-    //     where :{
-    //         userId :user.id
-    //     }
-    // })
+    
     console.log("-----------",cartTargat)
     res.status(200).json({cartTargat})
 } catch (err) {
     next(err)
 }
+}
+
+exports.checkOut=async(req,res,next)=>{
+    try {
+        console.log("user =",req.user)
+        console.log("body =",req.body)
+        const user =req.user
+        console.log("++++++++++",user)
+        const body =req.body
+        // console.log("+++++++++++",body.item)
+
+        const order = await prisma.order.create({
+            data :{
+                orderTotal : +body.totalPrice,
+                userId :user.id
+            }
+        })
+        for(let i in body.item){
+           body.item[i].orderId = order.id
+        }
+        console.log("-----------",body.item)
+
+        const orderItem =await prisma.orderitem.createMany({
+            data :body.item
+        })
+        console.log("",orderItem)
+        res.status(200).json({orderItem})
+    } catch (err) {
+        next(err)
+    }
 }
