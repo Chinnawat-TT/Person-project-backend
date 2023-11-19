@@ -7,7 +7,9 @@ const createError = require('../utility/create-error')
 exports.signup = async (req,res,next)=>{
 try {
     const { value ,error} = signupSchema.validate(req.body)
+    
     if(error) return next(error)
+
     value.password = await bcrypt.hash(value.password, 12)
     const user = await prisma.user.create({
         data : value
@@ -143,28 +145,31 @@ try {
 
 exports.checkOut=async(req,res,next)=>{
     try {
-        console.log("user =",req.user)
-        console.log("body =",req.body)
+        // console.log("user =",req.user)
+        // console.log("body =",req.body)
         const user =req.user
         console.log("++++++++++",user)
         const body =req.body
-        // console.log("+++++++++++",body.item)
+        console.log("bodyyy",body)
+        console.log("+++++++++++",body.item)
+        const data = body
 
+        console.log("",data)
         const order = await prisma.order.create({
             data :{
-                orderTotal : +body.totalPrice,
+                orderTotal : +data.totalPrice,
                 userId :user.id
             }
         })
-        for(let i in body.item){
-           body.item[i].orderId = order.id
+        for(let i in data.item){
+            data.item[i].orderId = order.id
         }
-        console.log("-----------",body.item)
+        console.log("-----------",data.item)
 
         const orderItem =await prisma.orderitem.createMany({
-            data :body.item
+            data :data.item
         })
-        console.log("",orderItem)
+        console.log("+++++++++++++++++",orderItem)
         res.status(200).json({orderItem})
     } catch (err) {
         next(err)
