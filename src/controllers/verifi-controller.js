@@ -181,3 +181,59 @@ exports.checkOut=async(req,res,next)=>{
         next(err)
     }
 }
+
+exports.getMyOrder = async(req,res,next)=>{
+    try {
+        const user = req.user
+        console.log(user)
+        const MyOrder =await prisma.order.findMany({
+            where :{
+                userId : user.id
+            },include :{
+                Orderitem :{
+                    include:{
+                        products :{
+                            include:{
+                                Productsimage : true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        console.log(MyOrder)
+        const update = MyOrder.map(el =>{
+            return {
+                id : el.id,
+                status : el.status,
+                slip : el.slip,
+                orderTotal :el.orderTotal,
+                name : el.Orderitem.map(el=> el.products.name),
+                quantiny : el.Orderitem.map(el=> el.quantiny),
+                size : el.Orderitem.map(el=> el.size),
+                price : el.Orderitem.map(el=> el.price),
+                imageUrl :el.Orderitem.map(el=> el.products.mainImage),
+            }
+        })
+        const newData = update.map(item => {
+            const newItem = {
+              id: item.id,
+              status: item.status,
+              slip: item.slip,
+              orderTotal: item.orderTotal,
+              items: item.name.map((name, index) => ({
+                name,
+                quantiny: item.quantiny[index],
+                size: item.size[index],
+                price: item.price[index],
+                imageUrl: item.imageUrl[index]
+              }))
+            };
+            return newItem;
+          });
+        console.log(newData)
+        res.status(200).json({order :newData})
+    } catch (err) {
+        next(err)
+    }
+}

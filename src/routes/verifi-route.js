@@ -12,5 +12,6 @@ router.get("/getcart",authenticaeMiddleware,verifiController.getcart)
 router.delete("/delete/:itemId",authenticaeMiddleware,verifiController.deleteItemCart)
 router.post("/checkout",authenticaeMiddleware,verifiController.checkOut)
 router.get("/me",authenticaeMiddleware,verifiController.getme)
+router.get("/getMyorder",authenticaeMiddleware,verifiController.getMyOrder)
 
 module.exports=router
