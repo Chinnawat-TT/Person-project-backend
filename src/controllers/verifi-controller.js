@@ -170,6 +170,12 @@ exports.checkOut=async(req,res,next)=>{
             data :data.item
         })
         console.log("+++++++++++++++++",orderItem)
+        const deleteCart = await prisma.cart.deleteMany({
+            where :{
+                userId :user.id
+            }
+        })
+        console.log(deleteCart)
         res.status(200).json({orderItem})
     } catch (err) {
         next(err)
