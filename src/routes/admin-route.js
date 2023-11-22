@@ -14,4 +14,5 @@ router.post("/",adminAuthenticateMiddleware,uploadMiddleware.fields([
 router.get("/",adminAuthenticateMiddleware,adminController.getAllProducts)
 router.delete("/:productId",adminAuthenticateMiddleware,adminController.deleteProduct)
 router.patch("/detail/:productId",adminAuthenticateMiddleware,adminController.editProduct)
+router.get("/getOrder",adminAuthenticateMiddleware,adminController.getOrder)
 module.exports=router
