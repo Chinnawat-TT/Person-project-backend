@@ -2,6 +2,7 @@ const express = require('express')
 
 const verifiController =require('../controllers/verifi-controller')
 const authenticaeMiddleware = require('../middleware/authenticate')
+const uploadMiddleware = require('../middleware/upload')
 
 const router =express.Router()
 
@@ -13,5 +14,6 @@ router.delete("/delete/:itemId",authenticaeMiddleware,verifiController.deleteIte
 router.post("/checkout",authenticaeMiddleware,verifiController.checkOut)
 router.get("/me",authenticaeMiddleware,verifiController.getme)
 router.get("/getMyorder",authenticaeMiddleware,verifiController.getMyOrder)
+router.patch("/confirmTrack/:productId",authenticaeMiddleware,uploadMiddleware.single("image"),verifiController.confirmTrack)
 
 module.exports=router

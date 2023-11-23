@@ -1,8 +1,10 @@
+const fs =require('fs/promises')
 const bcrypt = require('bcrypt')
 const jwt =require('jsonwebtoken')
 const prisma = require('../models/prisma')
 const { signupSchema, loginSchema } = require('../validators/verifi-validatir')
 const createError = require('../utility/create-error')
+const {upload}= require("../utility/cloudinary-service")
 
 exports.signup = async (req,res,next)=>{
 try {
@@ -64,6 +66,7 @@ try {
 }
 
 exports.getme = (req ,res ,next) =>{
+
     res.status(200).json({ user : req.user})
 }
 
@@ -236,4 +239,37 @@ exports.getMyOrder = async(req,res,next)=>{
     } catch (err) {
         next(err)
     }
+}
+
+exports.confirmTrack = async(req,res,next)=>{
+    try {
+        const target = req.params.productId
+        console.log(target)
+        const user = req.user
+        console.log(user)
+        
+        console.log(req.file)
+        if(!req.file){
+            return next(createError( 400,"image is required"));
+        }
+        
+        const url = await upload(req.file.path);
+        console.log(url)
+          
+        const update = await prisma.order.update({
+            where :{
+                id:+target,
+            },data : {
+                slip : url
+            }
+        })
+
+        res.status(200).json({update})
+    } catch (err) {
+        next(err)
+    } finally {
+        if (req.file) {
+          fs.unlink(req.file.path);
+        }
+      }
 }
