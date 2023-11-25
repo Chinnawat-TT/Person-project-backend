@@ -15,4 +15,5 @@ router.get("/",adminAuthenticateMiddleware,adminController.getAllProducts)
 router.delete("/:productId",adminAuthenticateMiddleware,adminController.deleteProduct)
 router.patch("/detail/:productId",adminAuthenticateMiddleware,adminController.editProduct)
 router.get("/getOrder",adminAuthenticateMiddleware,adminController.getOrder)
+router.patch("/approve/:orderId",adminAuthenticateMiddleware,adminController.approveOrder)
 module.exports=router

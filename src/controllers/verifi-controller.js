@@ -202,6 +202,8 @@ exports.getMyOrder = async(req,res,next)=>{
                         }
                     }
                 }
+            },orderBy :{
+                id :"desc"
             }
         })
         console.log(MyOrder)

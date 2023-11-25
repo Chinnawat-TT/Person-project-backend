@@ -167,6 +167,8 @@ exports.getOrder = async (req ,res ,next) =>{
                         }
                     }
                 }
+            },orderBy : {
+                id : "desc"
             }
         })
         console.log(MyOrder)
@@ -202,6 +204,36 @@ exports.getOrder = async (req ,res ,next) =>{
         console.log(newData)
 
         res.status(200).json({Order: newData})
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.approveOrder = async (req,res,next)=>{
+    try {
+        const target = req.params.orderId
+        
+        const findTarget =await prisma.order.findFirst({
+            where:{
+                id : +target
+            }
+        })
+        
+        if(!findTarget){
+            return next(createError(400,"exist order"))
+        }
+        
+        const data = req.body.status
+        console.log(data)
+        const update = await prisma.order.update({
+            where:{
+                id : +target
+            },data :{
+                status :data
+            }
+        })
+        console.log(update)
+        res.status(200).json({update})
     } catch (err) {
         next(err)
     }
