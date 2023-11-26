@@ -92,6 +92,12 @@ try {
         }
     })
 
+    await prisma.orderitem.deleteMany({
+        where :{
+            productId : value.productId
+        }
+    })
+
     await prisma.productsimage.deleteMany({
         where:{
             productId : value.productId
