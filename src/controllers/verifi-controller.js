@@ -130,9 +130,13 @@ try {
     const cartTargat = await prisma.cart.findFirst({
         where :{
             userId : user.id,
+            id: +target.cartId,
             productId : +target.itemId
         }
     })
+    if(!cartTargat){
+        res.status(400).json({msg : "cannot be deleted"})
+    }
     await prisma.cart.delete({
         where :{
             id : cartTargat.id
