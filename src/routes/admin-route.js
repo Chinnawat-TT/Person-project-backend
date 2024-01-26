@@ -10,7 +10,7 @@ const router =express.Router()
 router.post("/",adminAuthenticateMiddleware,uploadMiddleware.fields([
     { name : "mainImage",maxCount: 1 },
     { name: "subImage", maxCount: 10 }
-]),adminController.createMainImage)
+]),adminController.createProducts)
 router.get("/",adminAuthenticateMiddleware,adminController.getAllProducts)
 router.delete("/:productId",adminAuthenticateMiddleware,adminController.deleteProduct)
 router.patch("/detail/:productId",adminAuthenticateMiddleware,adminController.editProduct)

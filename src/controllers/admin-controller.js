@@ -4,10 +4,10 @@ const { upload }=require('../utility/cloudinary-service');
 const prisma = require("../models/prisma");
 const { checkProductIdSchema } =require("../validators/product-validator")
 
-exports.createMainImage = async(req,res,next)=>{
+exports.createProducts = async(req,res,next)=>{
     try {
-        console.log("main :",req.files.mainImage)
-        console.log("sub : ",req.files.subImage)
+        // console.log("main :",req.files.mainImage)
+        // console.log("sub : ",req.files.subImage)
         
         // console.log("--------------------",req.body.message)
 
@@ -16,22 +16,25 @@ exports.createMainImage = async(req,res,next)=>{
         if(req.files.mainImage){
             value.mainImage = await upload(req.files.mainImage[0].path)
         }
-        console.log(value)
+        // console.log(value)
         const product = await prisma.product.create({
             data : value
         })
-        console.log(product)
+        // console.log(product)
 
         const idSubImage ={productId : product.id}
-        console.log(idSubImage)
-        const {subImage} = req.files
-        
-        console.log(subImage)
-      
-        if (req.files.subImage){
-            for(element of subImage){
+        // console.log(idSubImage)
+        // const {subImage} = req.files
 
-                idSubImage.name = await upload(element.path)
+        const multiplePicturePromise = req.files.subImage.map( picture => upload(picture.path))
+        
+        let imageResponses = await Promise.all(multiplePicturePromise)
+        console.log(imageResponses)
+
+        if (req.files.subImage){
+            for(element of imageResponses){
+
+                idSubImage.name = element
                 
                  await prisma.productsimage.create({
                         data :idSubImage
@@ -40,6 +43,18 @@ exports.createMainImage = async(req,res,next)=>{
             }
             
         }
+        // if (req.files.subImage){
+        //     for(element of subImage){
+
+        //         idSubImage.name = await upload(element.path)
+                
+        //          await prisma.productsimage.create({
+        //                 data :idSubImage
+        //             })
+                    
+        //     }
+            
+        // }
 
        
         res.status(200).json("upload done")

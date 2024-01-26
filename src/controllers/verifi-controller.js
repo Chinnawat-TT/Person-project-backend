@@ -97,6 +97,25 @@ try {
 }
 }
 
+exports.addQuantity = async (req,res,next)=>{
+    try {
+        console.log(req.body)
+        const body = req.body
+        const target = await prisma.cart.update({
+            where : {
+                id : body.id
+            },
+            data : {
+                quantity : body.quantity
+            }
+        }
+        )
+        console.log(">>>>>>",target)
+        res.status(200).json({target})
+    } catch (err) {
+        next(err)
+    }
+}
 exports.getcart = async (req,res,next)=>{
     try {
 
